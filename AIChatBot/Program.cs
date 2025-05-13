@@ -16,7 +16,20 @@ builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<ITimeZoneService, TimeZoneService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDevClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
+
+app.UseCors("AllowAngularDevClient");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
